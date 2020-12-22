@@ -1,8 +1,8 @@
 <template>
   <app-layout>
       {{this.$props.user.email}}
-      <div >
-
+      <div v-for="abs in absence" v-bind:key='abs.id'>
+          
       </div>
   </app-layout>
 </template>
