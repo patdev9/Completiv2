@@ -9,12 +9,16 @@ use Illuminate\Database\Eloquent\Model;
 class absence extends Model
 {
     use HasFactory;
-    protected $fillable = ['id','statu_id','cour_id','user_id'];
+    protected $fillable = ['id','statu_id','cour_id','user_id','justificatif_id'];
 
     public function cour(){
         return $this->belongsTo(cour::class);
     }
     public function statut(){
         return $this->belongsTo(statu::class,'statu_id');
+    }
+
+    public function justificatif(){
+        return $this->belongsTo(justificatif::class);
     }
 }

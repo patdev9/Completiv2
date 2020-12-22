@@ -258,7 +258,7 @@
     </ul>
   </div>
 </div>
-            <slot class="w-full p-4"></slot>
+            <slot ></slot>
         </main>
 
         <!-- Modal Portal -->

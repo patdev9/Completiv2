@@ -36,7 +36,7 @@
                 {{absence.statut.statu}}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <button @click.prevent="toggleModal()" class="text-indigo-600 hover:text-indigo-900">Justifier</button>
+                <button @click.prevent="toggleModal(absence.id)" class="text-indigo-600 hover:text-indigo-900">Justifier</button>
               </td>
               
             </tr>
@@ -85,7 +85,7 @@
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="exampleFormControlInput1"
                   placeholder="Entrer la raison"
-                  
+                  v-model="libele"
                 />
                 <div v-if="$page.errors.title" class="text-red-500">
                   {{ $page.errors.title[0] }}
@@ -101,6 +101,24 @@
                   type="text"
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="exampleFormControlInput1"
+                  v-model="description"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Certificat </label
+                >
+                <input
+                  type="file"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="exampleFormControlInput1"
+                  placeholder="Entrer la raison"
+                  v-on:change="onImageChange"
                 />
                 <div v-if="$page.errors.title" class="text-red-500">
                   {{ $page.errors.title[0] }}
@@ -119,7 +137,7 @@
                   class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
                 >
                   <button
-                    v-on:click.prevent="store()"
+                    v-on:click.prevent="justifier()"
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                   >
@@ -163,27 +181,57 @@ export default {
     data(){
       return{
         showModal: false,
+        idabs:'',
+        libele:"",
+        description:'',
+        image:""
       }
     },
      methods: {
-    toggleModal: function () {
-      this.showModal = !this.showModal;
+    toggleModal: function (id) {
+      this.showModal = true;
+      this.idabs = id
+      console.log(this.idabs)
     },
     closeModal: function () {
-      this.showModal = !this.showModal;
+      this.showModal = false;
       this.reset();
       this.editMode = false;
+      console.log(this.idabs)
     },
     edit() {
       this.editMode = true;
       this.toggleModal();
     },
     reset() {
-      this.form = {
-        nom: null,
-      };
+      this.idabs = ''
+      this.libele = ""
+      this.description = ""
+      this.image = ''
     },
+     onImageChange(e) {
+      console.log(e);
+      this.image = e.target.files[0];
+    },
+    justifier(){
+      let data = new FormData()
+      data.append('libeler', this.libele)
+      data.append('idabs', this.idabs)
+      data.append('idu', this.$page.user.id)
+      data.append('description', this.description)
+      data.append('image', this.image)
+      this.$inertia.post('/justifier',data ,{
+        onSuccess: () => {
+          this.libele = ''
+        this.idabs = ''
+        this.description = ''
+        this.image = ''
+        this.closeModal()
+      }})
+        
+    }
      }
+     
 }
 </script>
 

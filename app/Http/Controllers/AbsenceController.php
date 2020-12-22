@@ -8,6 +8,7 @@ use App\Models\cour;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\justificatif;
 
 class AbsenceController extends Controller
 {
@@ -46,5 +47,23 @@ class AbsenceController extends Controller
         return Inertia::render('etudiant/mesAbsence',[
             'absences'=>$abs
         ]);
+    }
+    
+    public function justifier(Request $request)
+    {
+        $idu = $request->idu;
+        $absence = absence::find($request->idabs);
+        $imageName = $request->image->hashName();
+        $request->image->move(public_path('absences'),$imageName);
+        $justificatif =justificatif::create([
+            'libeler'=>$request->libeler,
+            'description'=>$request->description,
+            'image'=>$imageName
+        ]);
+        $absence->justificatif_id = $justificatif->id;
+        $absence->statu_id =3;
+        $absence->save();
+        return $this->absence($idu);
+       
     }
 }

@@ -100,9 +100,6 @@ import AppLayout from '@/Layouts/AppLayout';
               </td>
               
             </tr>
-           
-            
-            <!-- More rows... -->
           </tbody>
         </table>
       </div>

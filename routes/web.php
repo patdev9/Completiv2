@@ -39,7 +39,12 @@ Route::group(['auth:sanctum', 'verified'], function(){
 
     Route::get('/appel/{id}','App\Http\Controllers\AbsenceController@index')->name('appel');
     Route::post('/absencesave','App\Http\Controllers\AbsenceController@store');
+    Route::post('/justifier','App\Http\Controllers\AbsenceController@justifier');
     Route::get('/mesabsences/{id}','App\Http\Controllers\AbsenceController@absence')->name('mesabsences');
+
+    Route::get('/abs','App\Http\Controllers\JustificatifController@index');
+    Route::get('/clabs/{id}','App\Http\Controllers\JustificatifController@show');
+    Route::get('/userabs/{id}','App\Http\Controllers\JustificatifController@userabs');
 
     Route::get('/ccp', 'App\Http\Controllers\ModuleEnseignementController@index')->name('admin.ccp');
     Route::post('/ccpsave', 'App\Http\Controllers\ModuleEnseignementController@store');

@@ -56,6 +56,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Role');
     }
 
+    public function absences(){
+        return $this->hasMany(absence::class, 'user_id',);
+    }
     /**
      * The accessors to append to the model's array form.
      *
