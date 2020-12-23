@@ -17,7 +17,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-Route::group(['auth:sanctum', 'verified'], function(){
+
+Route::group(["middleware" => ["auth"]], function(){
 
     Route::post('/filiereSave', 'App\Http\Controllers\FiliereController@store');
     Route::get('/filiere', 'App\Http\Controllers\FiliereController@index')->name('admin.index');
@@ -42,9 +43,10 @@ Route::group(['auth:sanctum', 'verified'], function(){
     Route::post('/justifier','App\Http\Controllers\AbsenceController@justifier');
     Route::get('/mesabsences/{id}','App\Http\Controllers\AbsenceController@absence')->name('mesabsences');
 
-    Route::get('/abs','App\Http\Controllers\JustificatifController@index');
+    Route::get('/abs','App\Http\Controllers\JustificatifController@index')->name('classeabs');
     Route::get('/clabs/{id}','App\Http\Controllers\JustificatifController@show');
     Route::get('/userabs/{id}','App\Http\Controllers\JustificatifController@userabs');
+    Route::get('/userjust/{id}','App\Http\Controllers\JustificatifController@justificatif');
 
     Route::get('/ccp', 'App\Http\Controllers\ModuleEnseignementController@index')->name('admin.ccp');
     Route::post('/ccpsave', 'App\Http\Controllers\ModuleEnseignementController@store');

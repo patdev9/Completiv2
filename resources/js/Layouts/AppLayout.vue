@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-100">
+    <div class="min-h-screen bg-gray-100 ">
         <nav class="bg-white border-b border-gray-100">
             <!-- Primary Navigation Menu -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -202,16 +202,18 @@
 
         <!-- Page Heading -->
         
+<div class="flex">
+
 
         <!-- Page Content -->
-        <main class="flex w-full h-screen">
+        
             <!-- component -->
 
 
 <div class="min-h-screen flex flex-row bg-gray-100">
   <div class="flex flex-col w-56 bg-white rounded-r-3xl overflow-hidden">
     
-    <ul class="flex flex-col py-4">
+    <ul class="fixed flex flex-col py-4">
       <li>
           
         <a :href="'/mesabsences/'+$page.user.id"  class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
@@ -240,6 +242,12 @@
         </a>
       </li>
       <li>
+        <a :href="route('classeabs')" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
+          <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class='bx bx-calendar-week'></i></span>
+          <span class="text-sm font-medium">absences</span>
+        </a>
+      </li>
+      <li>
         <a href="#" class="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-800">
           <span class="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400"><i class="bx bx-bell"></i></span>
           <span class="text-sm font-medium">Notifications</span>
@@ -258,9 +266,11 @@
     </ul>
   </div>
 </div>
+<main class="flex w-full h-full">
             <slot ></slot>
-        </main>
 
+        </main>
+</div>
         <!-- Modal Portal -->
         <portal-target name="modal" multiple>
         </portal-target>

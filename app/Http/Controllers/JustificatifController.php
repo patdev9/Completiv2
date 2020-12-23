@@ -28,11 +28,15 @@ class JustificatifController extends Controller
 
     public function userabs($id){
         $user = User::find($id);
-        $absence = absence::with('justificatif','cour','statu')->where('user_id','=',$user->id)->get();
+        $absence = absence::with('justificatif','cour','statut')->where('user_id','=',$user->id)->get();
 
         return Inertia::render('admin/userabs',[
             'absence'=>$absence,
             'user'=>$user
         ]);
+    }
+    public function justificatif($id){
+        $just = justificatif::find($id);
+        return response()->json($just); 
     }
 }

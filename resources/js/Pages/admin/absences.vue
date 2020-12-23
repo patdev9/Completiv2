@@ -1,10 +1,9 @@
 <template>
   <app-layout>
-      <div class="flex-wrap">
+      <div class="flex-row w-full h-full">
+  
+      <div class="flex flex-row w-full aligne-items justify-start h-10">
 
-     
-
-      
       <div  v-for="classe in classes" v-bind:key="classe.id">
           <button  class="m-4 bg-blue-800 rounded text-white flex-row" v-on:click="get_users(classe.id)"> {{classe.nom}} </button>
       </div>
@@ -71,7 +70,7 @@
       <template v-else>
           dknfdlks
       </template>
-
+</div>
   </app-layout>
 </template>
 
@@ -83,7 +82,8 @@ export default {
 
     data(){
         return{
-            abs:[]
+            abs:[],
+            just:[]
         }
     },
 
@@ -91,6 +91,9 @@ export default {
         get_users(id){
             console.log(id)
             axios.get('/clabs/'+id).then(res=>this.abs = res.data).catch(err=>console.log(err))
+        },
+        get_just(id){
+            axios.get('/userjust/'+id).then(res=>this.just=res.data).catch(err=>console.log(err))
         }
     }
 }
