@@ -107,7 +107,6 @@
 								18V5h10z"></path>
 						</svg>
                         <p>voir le justificatif</p>
-
 					</div>
 				</div>
           </div>
