@@ -68,7 +68,7 @@
 </div>
       </template>
       <template v-else>
-          dknfdlks
+         choisir une classe 
       </template>
 </div>
   </app-layout>
@@ -92,9 +92,7 @@ export default {
             console.log(id)
             axios.get('/clabs/'+id).then(res=>this.abs = res.data).catch(err=>console.log(err))
         },
-        get_just(id){
-            axios.get('/userjust/'+id).then(res=>this.just=res.data).catch(err=>console.log(err))
-        }
+       
     }
 }
 </script>
