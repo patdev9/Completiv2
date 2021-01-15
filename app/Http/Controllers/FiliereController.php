@@ -31,8 +31,7 @@ class FiliereController extends Controller
             $ccp = moduleEnseignement::find($request[$i]);
             $filiere->ccp()->attach($ccp);
         }
-        return $this->index();
-       
+        return $this->index();     
     }
     public function destroy($id)
     {

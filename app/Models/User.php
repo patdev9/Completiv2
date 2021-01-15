@@ -27,9 +27,12 @@ class User extends Authenticatable
         'nom',
         'prenom',
         'email',
+        'Date_naissance',
+        'Lieu_naissance',
+        'Nationalite',
         'password',
         'role_id',
-        'classe_id'
+        'user_id'
     ];
 
     /**
@@ -54,6 +57,10 @@ class User extends Authenticatable
     ];
     public function role(){
         return $this->belongsTo('App\Models\Role');
+    }
+
+    public function promotion(){
+        return $this->belongsToMany(Promotion::class, 'promotion_user','user_id','promotion_id');
     }
 
     public function absences(){

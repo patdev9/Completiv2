@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bloc_competence;
 use App\Models\classe;
 use App\Models\cour;
 use App\Models\moduleEnseignement;
+use App\Models\Promotion;
 use App\Models\uniteEnseignement;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -19,9 +21,9 @@ class CourController extends Controller
      */
     public function index($id)
     {
-        $classe = classe::find($id);
-        $ccps = moduleEnseignement::get();
-        $cours = cour::where('classe_id','=',$id)->with('ccp')->get();
+        $classe = Promotion::find($id);
+        $ccps = Bloc_competence::get();
+        $cours = cour::where('promotion_id','=',$id)->with('ccp','uniter')->get();
         return Inertia::render('admin/edt',[
             'classe'=>$classe,
             'cours'=>$cours,
@@ -29,7 +31,7 @@ class CourController extends Controller
         ]);
     }
     public function units($id){
-        $units = uniteEnseignement::where('module_enseignement_id','=',$id)->get();
+        $units = uniteEnseignement::where('bloc_competence_id','=',$id)->get();
         return response()->json($units);
     }
     public function user(){
@@ -38,7 +40,7 @@ class CourController extends Controller
     }
 
     public function classes(){
-        $classes = classe::get();
+        $classes = Promotion::get();
         return Inertia::render('admin/planing',[
             'classes'=>$classes
         ]);
@@ -70,8 +72,8 @@ class CourController extends Controller
             'date_end'=> $request['end'],
             'user_id'=> $request['id_formateur'],
             'unite_enseignement_id'=> $request['unit_id'],
-            'module_enseignement_id'=> $request['ccp_id'],
-            'classe_id'=> $request['classe_id'],
+
+            'promotion_id'=> $request['classe_id'],
         ]);
 
         return $this->index($id);
@@ -80,6 +82,7 @@ class CourController extends Controller
 
     public function details($id){
         $cour = cour::with('ccp','classe','formateur','uniter')->find($id);
+        
         return response()->json($cour); 
     }
 

@@ -111,7 +111,7 @@
 				</div>
           </div>
       </div>
-      <template v-if="this.just.length < 0">
+      <template v-if="this.just.length != 0">
           <div class="flex flex-row">
               <div class="flex-col">
                   {{just.id}}

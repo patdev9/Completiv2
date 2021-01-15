@@ -50,7 +50,7 @@
                     :key="index"
                     :value="ccp.id"
                   >
-                    {{ ccp.CCP }}
+                    {{ ccp.Nom }}
                   </option>
                 </select>
               </div>
@@ -208,9 +208,9 @@
           <div class="relative p-6 flex-auto">
             <div class="mb-4">
               
-              <p>CCP: {{this.details.ccp.CCP}}</p>
+              <p></p>
               <p>Uniter d'enseignement: {{this.details.uniter.nom}}</p>
-              <p>Classe: {{this.details.classe.nom}}</p>
+              <p>Classe: {{this.details.classe.Nom}}</p>
               <p>Formateur: {{this.details.formateur.nom}}</p>
             </div>
           </div>
@@ -308,7 +308,7 @@ export default {
       console.log("a");
       this.calendarOptions.events.push({
         id: this.$props.cours[i].id,
-        title: this.$props.cours[i].ccp.CCP,
+        title: this.$props.cours[i].uniter.nom,
         start: this.$props.cours[i].date_start.replace(" ", "T"),
         end: this.$props.cours[i].date_end.replace(" ", "T"),
       });
@@ -351,10 +351,12 @@ export default {
         .get("/courDetails/" + id)
         .then((res) => (this.details = res.data))
         .catch((err) => console.log(err));
+       
     },
     store() {
+      console.log(this.$props.classe.id)
       let data = new FormData();
-      data.append("classe_id", this.classe.id);
+      data.append("classe_id", this.$props.classe.id);
       data.append("ccp_id", this.newEvent.id);
       data.append("unit_id", this.newEvent.id_unit);
       data.append("id_formateur", this.newEvent.id_formateur);

@@ -1,14 +1,15 @@
 <template>
   <app-layout>
       <div class="flex-row w-full h-full">
-  
+   {{Object.keys(this.abs).length}}
       <div class="flex flex-row w-full aligne-items justify-start h-10">
 
       <div  v-for="classe in classes" v-bind:key="classe.id">
-          <button  class="m-4 bg-blue-800 rounded text-white flex-row" v-on:click="get_users(classe.id)"> {{classe.nom}} </button>
+          <button  class="m-4 bg-blue-800 rounded text-white flex-row" v-on:click="get_users(classe.id)"> {{classe.Nom}} </button>
       </div>
       </div>
-      <template class="flex-col" v-if="this.abs.length > 0">
+     
+      <template class="flex-col" v-if="Object.keys(this.abs).length > 0">
  <div class="w-full p-4" >
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -17,7 +18,7 @@
           <thead class="bg-gray-50">
             <tr>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                nom
+                Nom
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 prenom
@@ -34,7 +35,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="user in this.abs" v-bind:key="user.id">
+            <tr v-for="(user) in this.abs" v-bind:key="user.id">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
@@ -42,22 +43,22 @@
                   </div>
                   <div class="ml-4">
                     <div class="text-sm font-medium text-gray-900">
-                      {{user.nom}}
+                      {{user[0].nom}}
                     </div>
                   </div>
                 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                {{user.prenom}}
+                {{user[0].prenom}}
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                {{user.email}}
+                {{user[0].email}}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                {{user.absences.length}}
+                {{user[0].absences.length}}
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a :href="'/userabs/'+user.id" class="text-indigo-600 hover:text-indigo-900">Voir le profil</a>
+                <a :href="'/userabs/'+user[0].id" class="text-indigo-600 hover:text-indigo-900">Voir le profil</a>
               </td>
             </tr>
           </tbody>
@@ -66,6 +67,7 @@
     </div>
   </div>
 </div>
+
       </template>
       <template v-else>
          choisir une classe 
@@ -83,7 +85,7 @@ export default {
     data(){
         return{
             abs:[],
-            just:[]
+           
         }
     },
 
@@ -91,6 +93,7 @@ export default {
         get_users(id){
             console.log(id)
             axios.get('/clabs/'+id).then(res=>this.abs = res.data).catch(err=>console.log(err))
+            
         },
        
     }

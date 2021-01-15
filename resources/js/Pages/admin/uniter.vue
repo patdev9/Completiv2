@@ -84,6 +84,23 @@
                   {{ $page.errors.title[0] }}
                 </div>
               </div>
+              <div class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Description</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="exampleFormControlInput1"
+                  placeholder="Entrer le nom de la filière"
+                  v-model="form.Description"
+                />
+                <div v-if="$page.errors.nom" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
             </div>
 
             <!--footer-->
@@ -153,6 +170,7 @@ export default {
       editMode: false,
       form: {
         nom: null,
+        Description: null,
       },
     };
   },
@@ -178,7 +196,8 @@ export default {
       console.log(this.form.nom);
       let data = new FormData();
       data.append("nom", this.form.nom);
-      data.append("module_enseignement_id", this.$props.ccp.id);
+      data.append("Description", this.form.Description);
+      data.append("bloc_competence_id", this.$props.ccp.id);
       this.$inertia.post("/unitesave", data);
       this.closeModal();
     },

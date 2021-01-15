@@ -19,7 +19,13 @@
                     scope="col"
                     class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                   >
-                    CCP
+                    Nom
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Description
                   </th>
 
                   <th scope="col" class="relative px-6 py-3">
@@ -33,7 +39,10 @@
               <tbody class="bg-white divide-y divide-gray-200">
                 <tr v-for="ccp in this.$props.ccps" v-bind:key="ccp.id">
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ ccp.CCP }}
+                    {{ ccp.Nom }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {{ ccp.Description }}
                   </td>
                   
   <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
@@ -98,6 +107,23 @@
                   id="exampleFormControlInput1"
                   placeholder="Entrer le nom de la filière"
                   v-model="form.nom"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Description</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="exampleFormControlInput1"
+                  placeholder="Entrer le nom de la filière"
+                  v-model="form.description"
                 />
                 <div v-if="$page.errors.title" class="text-red-500">
                   {{ $page.errors.title[0] }}
@@ -172,6 +198,7 @@ export default {
       editMode: false,
       form: {
         nom: null,
+        description:null
       },
     };
   },
@@ -191,12 +218,14 @@ export default {
     reset() {
       this.form = {
         nom: null,
+        description:null
       };
     },
     store() {
       console.log(this.form.nom);
       let data = new FormData();
-      data.append("ccp", this.form.nom);
+      data.append("Nom", this.form.nom);
+      data.append("Description", this.form.description);
       this.$inertia.post("/ccpsave", data);
       this.closeModal();
     },

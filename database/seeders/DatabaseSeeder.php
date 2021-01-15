@@ -15,27 +15,35 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\User::factory(10)->create();
+       // \App\Models\User::factory(10)->create();
         DB::table('roles')->insert([
-            'nom'=>'Etudiant'
+            'nom'=>'Etudiant',
+            'description'=>'étudiant'
         ]);
         DB::table('roles')->insert([
-            'nom'=>'Formateur'
+            'nom'=>'Formateur',
+            'description'=>'Formateur'
         ]);
         DB::table('roles')->insert([
-            'nom'=>'Tuteur'
+            'nom'=>'Tuteur',
+            'description'=>'Formateur'
         ]);
         DB::table('roles')->insert([
-            'nom'=>'Superviseur'
+            'nom'=>'Superviseur',
+            'description'=>'Formateur'
         ]);
         DB::table('roles')->insert([
-            'nom'=>'Admin'
+            'nom'=>'Admin',
+            'description'=>'Formateur'
         ]);
 
         DB::table('users')->insert([
             'nom' => 'LUNGU',
             'prenom' => 'LUNGU',
             'email' => 'patrick.lungu@live.fr',
+            'Date_naissance'=>'1998-05-09',
+            'Lieu_naissance'=>'Moldavie',
+            'Nationalite'=>'Français',
             'password' => Hash::make('password'),
             'role_id'=>'5'
         ]);
@@ -43,28 +51,33 @@ class DatabaseSeeder extends Seeder
             'nom' => 'MEHDI',
             'prenom' => 'CHARIF',
             'email' => 'mehdi@imie.fr',
+            'Date_naissance'=>'1998-05-09',
+            'Lieu_naissance'=>'Moldavie',
+            'Nationalite'=>'Français',
             'password' => Hash::make('password'),
             'role_id'=>'5'
         ]);
+        
         
         DB::table('users')->insert([
             'nom' => 'formateur',
             'prenom' => 'formateur',
             'email' => 'formateur@imie.fr',
+            'Date_naissance'=>'1998-05-09',
+            'Lieu_naissance'=>'Moldavie',
+            'Nationalite'=>'Français',
             'password' => Hash::make('password'),
             'role_id'=>'2'
         ]);
-        DB::table('status')->insert([
-            'statu' => 'a justifier',
-        ]);
-        DB::table('status')->insert([
-            'statu' => 'justifier',
-        ]);
-        DB::table('status')->insert([
-            'statu' => 'en cours de traitement',
-        ]);
-        DB::table('status')->insert([
-            'statu' => 'Non recevable',
+        DB::table('users')->insert([
+            'nom' => 'etudiant',
+            'prenom' => 'etudiant',
+            'email' => 'aa@a.fr',
+            'Date_naissance'=>'1998-05-09',
+            'Lieu_naissance'=>'Moldavie',
+            'Nationalite'=>'Français',
+            'password' => Hash::make('password'),
+            'role_id'=>'1'
         ]);
     }
 }

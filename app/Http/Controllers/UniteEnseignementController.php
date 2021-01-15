@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bloc_competence;
 use Illuminate\Http\Request;
-use App\Models\moduleEnseignement;
+
 use App\Models\uniteEnseignement;
 use Inertia\Inertia;
 
 class UniteEnseignementController extends Controller
 {
     public function index($id){
-        $ccp = moduleEnseignement::find($id);
-        $uniter = uniteEnseignement::where('module_enseignement_id','=',$id)->with('ccp')->get();
+        $ccp = Bloc_competence::find($id);
+        $uniter = uniteEnseignement::where('bloc_competence_id','=',$id)->with('ccp')->get();
         return Inertia::render('admin/uniter',[
             'ccp'=>$ccp,
             'uniters'=>$uniter
@@ -23,17 +24,18 @@ class UniteEnseignementController extends Controller
         // $v = Validator::make($request->all(), [
         //     'ccp' => ['required', 'string', 'max:255']
         // ])->validate();
-        $id = $request['module_enseignement_id'];
+        $id = $request['bloc_competence_id'];
         uniteEnseignement::create([
             'nom'=>$request['nom'],
-            'module_enseignement_id'=> $request['module_enseignement_id'],
+            'Description'=>$request['Description'],
+            'bloc_competence_id'=> $request['bloc_competence_id'],
         ]);
         return $this->index($id);
     }
     public function destroy($id)
     {
         $p = uniteEnseignement::find($id);
-        $id = $p->module_enseignement_id;
+        $id = $p->bloc_competence_id;
         
         uniteEnseignement::find($id)->delete();
       

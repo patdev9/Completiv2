@@ -17,12 +17,14 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('nom');
             $table->string('prenom');
+            $table->string('Date_naissance');
+            $table->string('Lieu_naissance');
+            $table->string('Nationalite');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->foreignId('role_id')->default('1')->constrained();
-            $table->foreignId('classe_id')->nullable()->constrained();
             $table->foreignId('user_id')->nullable()->constrained();
             $table->foreignId('current_team_id')->nullable();
             $table->text('profile_photo_path')->nullable();

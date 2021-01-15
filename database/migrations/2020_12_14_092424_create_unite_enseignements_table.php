@@ -16,7 +16,8 @@ class CreateUniteEnseignementsTable extends Migration
         Schema::create('unite_enseignements', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            $table->foreignId('module_enseignement_id')->constrained();
+            $table->text('Description');
+            $table->foreignId('bloc_competence_id')->constrained();
             $table->timestamps();
         });
     }

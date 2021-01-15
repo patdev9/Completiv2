@@ -8,8 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class uniteEnseignement extends Model
 {
     use HasFactory;
-    protected $fillable = ['module_enseignement_id','nom'];
+    protected $fillable = ['bloc_competence_id','nom','Description'];
     public function ccp(){
-        return $this->belongsTo(moduleEnseignement::class);
+        return $this->belongsTo(Bloc_competence::class);
     }
 }

@@ -27,7 +27,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="user in this.$props.users" v-bind:key="user.id">
+            <tr v-for="user in this.$props.classe[0].user" v-bind:key="user.id">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">
@@ -109,14 +109,19 @@ export default {
     },
     store(){
         let data = []
+        console.log(this.$props.classe[0].id)
         for(let i = 0; i < this.tableData.length; i++){
             let td = Object.values(this.tableData[i])  
+            console.log(td)
             data.push({
+              'classe_id': this.$props.classe[0].id,
                 'nom': td[0],
                 'prenom': td[1],
                 'email': td[2],
-                'password': td[3],
-                'classe_id': this.$props.classe.id,
+                'Date_naissance': td[3],
+                'Lieu_naissance': td[4],
+                'Nationalite': td[5],
+                'password': td[6],
             }) 
             this.$inertia.post('/classeUsave',data)
         

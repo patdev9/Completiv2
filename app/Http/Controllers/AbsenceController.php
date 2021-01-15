@@ -9,21 +9,19 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\justificatif;
+use App\Models\Promotion;
 
 class AbsenceController extends Controller
 {
     public function index($id){
         
-        $cour = cour::find($id);
-        
-        
-        $users = User::where('classe_id','=',$cour->classe_id)->get();
+        $cour = cour::find($id);   
+        $users = Promotion::find($cour->promotion_id)->with('user')->get();
         
         return Inertia::render('admin/appel',[
             'cour'=>$cour,
             'users'=>$users
         ]);
-
     }
     public function store(Request $request){
         
@@ -34,16 +32,15 @@ class AbsenceController extends Controller
             absence::create([
                 'user_id' => $p['id_user'],
                 'cour_id' => $p['cour_id'],
-                'statu_id'=>1,
+               
             ]);
             
         }
-        return $this->index($id);
-        
+        return $this->index($id);    
     }
 
     public function absence($id){
-        $abs = absence::where('user_id','=',$id)->with('cour','statut')->get();
+        $abs = absence::where('user_id','=',$id)->with('cour')->get();
         return Inertia::render('etudiant/mesAbsence',[
             'absences'=>$abs
         ]);
@@ -61,9 +58,8 @@ class AbsenceController extends Controller
             'image'=>$imageName
         ]);
         $absence->justificatif_id = $justificatif->id;
-        $absence->statu_id =3;
+        $absence->statu_id=3;
         $absence->save();
         return $this->absence($idu);
-       
     }
 }

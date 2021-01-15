@@ -16,6 +16,5 @@ class moduleEnseignement extends Model
     }
     public function uniter(){
         return $this->hasMany(uniteEnseignement::class);
-    }
-    
+    } 
 }

@@ -18,8 +18,7 @@ class CreateCoursTable extends Migration
             $table->dateTime('date_start');
             $table->dateTime('date_end');
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('classe_id')->constrained();
-            $table->foreignId('module_enseignement_id')->constrained();
+            $table->foreignId('promotion_id')->constrained();
             $table->foreignId('unite_enseignement_id')->constrained();
             $table->timestamps();
         });

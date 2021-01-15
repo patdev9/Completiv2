@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\classe;
+use App\Models\Promotion;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Inertia\Inertia;
@@ -17,11 +18,11 @@ class UserController extends Controller
         ]);
     }
     public function classeuser($id){
-        $classe = classe::find($id);
-        $users = User::where('classe_id','=',$id)->get();
+        $classe = Promotion::where('id','=',$id)->with('user')->get();
+        
         return Inertia::render('admin/classeUser',[
             'classe'=>$classe,
-            'users'=>$users
+         
         ]);
     }
 
@@ -31,17 +32,22 @@ class UserController extends Controller
 
     public function store(Request $request){
         
+       
         $id = $request[0]['classe_id'];
         $td =$request->request;
-        
         foreach ($td as $p){
-            User::create([
+            $pass = $p['password'];
+           $user= User::create([
                 'nom' => $p['nom'],
                 'prenom' => $p['prenom'],
                 'email' => $p['email'],
-                'password' => Hash::make($p['password']),
-                'classe_id'=>$p['classe_id']
+                'Date_naissance' => $p['Date_naissance'],
+                'Lieu_naissance' => $p['Lieu_naissance'],
+                'Nationalite' => $p['Nationalite'],
+                'password' => Hash::make($pass),
             ]);
+            
+            $user->promotion()->attach($id,['inscrit_formation'=>true,'inscrit_titre'=>true]);
             
         }
         return $this->classeuser($id);

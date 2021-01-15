@@ -25,7 +25,7 @@
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="user in this.$props.users" v-bind:key="user.id">
+            <tr v-for="user in this.$props.users[0].user" v-bind:key="user.id">
               <td class="px-6 py-4 whitespace-nowrap">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-10 w-10">

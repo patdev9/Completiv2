@@ -18,7 +18,7 @@
           <tbody class="bg-white divide-y divide-gray-200"> 
             <tr v-for="classe in this.$props.classes" v-bind:key="classe.id">
               <td class="px-6 py-4 whitespace-nowrap">
-                {{classe.nom}}
+                {{classe.Nom}}
               </td>
                 <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
                 <a v-bind:href="'/EDT/'+classe.id" class="text-indigo-600 hover:text-indigo-900">Voir l'empoie du temps</a>
