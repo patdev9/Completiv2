@@ -46,9 +46,7 @@
                     CCP
                   </th>
 
-                  <th scope="col" class="relative px-6 py-3">
-                    <span class="sr-only">Edit</span>
-                  </th>
+                  
                   <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">Edit</span>
                   </th>
@@ -72,14 +70,12 @@
                     {{ titre.Date_renouvellement }}
                 </td>                 
                 <td class="px-6 py-4 whitespace-nowrap">
-                   <div class="text-sm text-gray-900" v-for="ccp in titre.ccp" v-bind:key="ccp.id" >{{ccp.Nom}}</div>
+                   <div class="text-sm text-gray-900" v-for="ccp in titre.ccp" v-bind:key="ccp.id" >{{ccp.Nom}} {{ccp.pivot.Volume_horaire}} h</div>
                 </td>                  
-                <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
-                <a v-bind:href="'/uniter/'+titre.id" class="text-indigo-600 hover:text-indigo-900">Lier des ccps</a>
-              </td> 
+                
                   <td
                     class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a class="text-indigo-600 hover:text-indigo-900"
+                    <a @click="edit(titre.id)" class="text-indigo-600 hover:text-indigo-900"
                       >Modifier</a>
                     <a
                       @click="destroy(titre.id)"
@@ -206,9 +202,8 @@
                   {{ $page.errors.title[0] }}
                 </div>
               </div>
-               <multiselect v-model="value" tag-placeholder="Ajouter un ccp" placeholder="Ajouter un ccp" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect>
+              <!-- <multiselect v-model="value" tag-placeholder="Ajouter un ccp" placeholder="Ajouter un ccp" label="name" track-by="code" :options="options" :multiple="true" :taggable="true" @tag="addTag"></multiselect> -->
             </div>
-            <!--footer-->
             <div
               class="flex items-center justify-end p-6 border-t border-solid border-gray-300 rounded-b"
             >
@@ -235,7 +230,7 @@
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     v-show="editMode"
-                    @click="update(form)"
+                    @click="update()"
                   >Modifier
                   </button>
                 </span>
@@ -277,6 +272,7 @@ export default {
       showModal: false,
       editMode: false,
       form: {
+        modifid:null,
         nom: null,
         description:null,
         O_certificateur:null,
@@ -300,12 +296,35 @@ export default {
       this.reset();
       this.editMode = false;
     },
-    edit() {
+    edit(id) {
+    this.modifid=id
       this.editMode = true;
       this.toggleModal();
+    axios.get('/titreget/'+id).then(res=>this.form = {
+        nom: res.data.Nom,
+        description:res.data.Description,
+        O_certificateur:res.data.Organisme_certificateur,
+        date_accre:res.data.Date_debut_accreditation,
+        date_renouvellement:res.data.Date_renouvellement,
+
+      })
     },
+    update(){
+        let dat = new FormData();
+        dat.append("nom", this.form.nom);
+        dat.append("Description", this.form.description);
+        dat.append("Organisme_certificateur", this.form.O_certificateur);
+        dat.append("Date_debut_accreditation", this.form.date_accre);
+        dat.append("Date_renouvellement", this.form.date_renouvellement);
+        this.$inertia.post("/titreupdate/"+this.modifid, dat)
+        this.closeModal();
+        
+    },
+    
+
     reset() {
       this.form = {
+        modifid:null,
         nom: null,
         description:null,
         O_certificateur:null,
@@ -313,6 +332,8 @@ export default {
         date_renouvellement:null,
         code:null
       };
+      this.value= []
+      
     },
     addTag (newTag) {
       const tag = {

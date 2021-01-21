@@ -100,7 +100,7 @@
                   <td
                     class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
                   >
-                    <a class="text-indigo-600 hover:text-indigo-900"
+                    <a @click="edit(classe.id)" class="text-indigo-600 hover:text-indigo-900"
                       >Modifier</a
                     >
                     <a
@@ -161,8 +161,7 @@
                 <label
                   for="exampleFormControlInput1"
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  >Description</label
-                >
+                  >Description</label>
                 <textarea
                   type="text"
                   class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -191,14 +190,65 @@
                   {{ $page.errors.title[0] }}
                 </div>
               </div>
+              <div  v-show="editMode" class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Nombre d'inscrit formation</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 
+                  
+                  v-model="form.inscritF"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
+              <div  v-show="editMode" class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Nombre d'inscrit titre</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 
+                  
+                  v-model="form.inscritT"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
+              <div  v-show="editMode" class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Taux de réussite</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                 
+                  
+                  v-model="form.taux"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
               <div class="mb-4">
                 <label
                   for="exampleFormControlInput1"
                   class="block text-gray-700 text-sm font-bold mb-2"
                   >Titre préparer</label
                 >
-                <select v-model="form.titre_id" name="" id="" v-for="titre in this.$props.titres" :key="titre.id">
-                    <option   :value="titre.id">{{titre.Nom}}</option>
+                <select v-model="form.titre_id" name="" id="" >
+                    <option v-for="titre in this.$props.titres" :key="titre.id"  :value="titre.id">{{titre.Nom}}</option>
                 </select>
                 
                 <div v-if="$page.errors.title" class="text-red-500">
@@ -275,7 +325,11 @@ export default {
         nom: null,
         Description:null,
         titre_id:null,
-        Annee:null
+        Annee:null,
+        modifid:null,
+        inscritF:null,
+        inscritT:null,
+        taux:null
       },
     };
   },
@@ -288,13 +342,44 @@ export default {
       this.reset();
       this.editMode = false;
     },
-    edit() {
+   edit(id) {
       this.editMode = true;
       this.toggleModal();
+      axios.get("/classeget/"+id).then(res=>this.form ={
+        nom: res.data.Nom,
+        Description:res.data.Description,
+        titre_id:res.data.titre_id,
+        modifid:id,
+        Annee:res.data.Annee,
+        inscritF:res.data.Nb_inscrit_formation,
+        inscritT:res.data.Nb_inscrit_titre,
+        taux:res.data.taux_reussite
+      }).catch(err=>console.log(err))
+    },
+  
+    update(){
+let data = new FormData();
+     
+      data.append("Nom", this.form.nom);
+      data.append("Description", this.form.Description);
+      data.append("Annee", this.form.Annee);
+      data.append("titre_id", this.form.titre_id);
+      data.append("inscritF", this.form.inscritF);
+      data.append("inscritT", this.form.inscritT);
+      data.append("taux", this.form.taux);
+      this.$inertia.post("/classeupdate/"+this.form.modifid, data);
+      this.closeModal();
     },
     reset() {
       this.form = {
         nom: null,
+        Description:null,
+        titre_id:null,
+        Annee:null,
+        modifid:null,
+        inscritF:null,
+        inscritT:null,
+        taux:null
       };
     },
     store() {

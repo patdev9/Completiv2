@@ -14,9 +14,9 @@ class CreateBlocCompetenceTitresTable extends Migration
     public function up()
     {
         Schema::create('bloc_competence_titre', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('bloc_competence_id')->constrained();
-            $table->foreignId('titre_id')->constrained();
+         
+            $table->foreignId('bloc_competence_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('titre_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('Volume_horaire');
             $table->timestamps();
         });

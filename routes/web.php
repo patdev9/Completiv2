@@ -27,9 +27,15 @@ Route::group(["middleware" => ["auth"]], function(){
     Route::get('/classes', 'App\Http\Controllers\PromotionController@index')->name('admin.classe');
     Route::post('/classesave', 'App\Http\Controllers\PromotionController@store');
     Route::delete('/classedelete/{id}', 'App\Http\Controllers\PromotionController@destroy');
+    Route::get('/classeget/{id}', 'App\Http\Controllers\PromotionController@edit');
+    Route::post('/classeupdate/{id}', 'App\Http\Controllers\PromotionController@update');
 
     Route::get('/classeuser/{id}', 'App\Http\Controllers\UserController@classeuser')->name('admin.classeUser');
     Route::post('/classeUsave', 'App\Http\Controllers\UserController@store');
+    Route::post('/Usave', 'App\Http\Controllers\UserController@storeOne');
+    Route::get('/Userget/{id}', 'App\Http\Controllers\UserController@edit');
+    Route::post('/UserUpdate/{id}', 'App\Http\Controllers\UserController@update');
+    Route::delete('/UserDelete/{id}', 'App\Http\Controllers\UserController@destroy');
 
     Route::get('/classeEDT','App\Http\Controllers\CourController@classes')->name('admin.planing');
     Route::get('/EDT/{id}','App\Http\Controllers\CourController@index');
@@ -40,6 +46,7 @@ Route::group(["middleware" => ["auth"]], function(){
 
     Route::get('/appel/{id}','App\Http\Controllers\AbsenceController@index')->name('appel');
     Route::post('/absencesave','App\Http\Controllers\AbsenceController@store');
+    Route::post('/retardsave','App\Http\Controllers\AbsenceController@storeRetard');
     Route::post('/justifier','App\Http\Controllers\AbsenceController@justifier');
     Route::get('/mesabsences/{id}','App\Http\Controllers\AbsenceController@absence')->name('mesabsences');
 
@@ -49,12 +56,17 @@ Route::group(["middleware" => ["auth"]], function(){
     Route::get('/userjust/{id}','App\Http\Controllers\JustificatifController@justificatif');
 
     Route::get('/ccp', 'App\Http\Controllers\BlocCompetenceController@index')->name('admin.ccp');
+    Route::get('/titresGet', 'App\Http\Controllers\BlocCompetenceController@titreGet')->name('admin.ccp');
     Route::post('/ccpsave', 'App\Http\Controllers\BlocCompetenceController@store');
     Route::delete('/ccpdelete/{id}', 'App\Http\Controllers\BlocCompetenceController@destroy');
+    Route::get('/ccpget/{id}', 'App\Http\Controllers\BlocCompetenceController@edit');
+    Route::post('/ccpupdate/{id}', 'App\Http\Controllers\BlocCompetenceController@update');
 
     Route::get('/uniter/{id}','App\Http\Controllers\UniteEnseignementController@index')->name('admin.uniter');
     Route::post('/unitesave','App\Http\Controllers\UniteEnseignementController@store');
     Route::delete('/unitedelete/{id}','App\Http\Controllers\UniteEnseignementController@destroy');
+    Route::get('/uniteget/{id}','App\Http\Controllers\UniteEnseignementController@edit');
+    Route::post('/uniteUpdate/{id}','App\Http\Controllers\UniteEnseignementController@update');
 
     Route::get('/user', 'App\Http\Controllers\UserController@index')->name('admin.user');
     Route::get('/u', 'App\Http\Controllers\UserController@test');
@@ -64,6 +76,8 @@ Route::group(["middleware" => ["auth"]], function(){
     Route::get('/titre','App\Http\Controllers\TitreController@index');
     Route::post('/titresave','App\Http\Controllers\TitreController@store');
     Route::delete('/titredelete/{id}','App\Http\Controllers\TitreController@destroy');
+    Route::get('/titreget/{id}','App\Http\Controllers\TitreController@edit');
+    Route::post('/titreupdate/{id}','App\Http\Controllers\TitreController@update');
 
  
 

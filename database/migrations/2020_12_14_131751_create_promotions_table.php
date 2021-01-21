@@ -21,7 +21,7 @@ class CreatePromotionsTable extends Migration
             $table->string('Nb_inscrit_formation')->nullable();
             $table->string('Nb_inscrit_titre')->nullable();
             $table->integer('taux_reussite')->nullable();
-            $table->foreignId('titre_id')->constrained();
+            $table->foreignId('titre_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

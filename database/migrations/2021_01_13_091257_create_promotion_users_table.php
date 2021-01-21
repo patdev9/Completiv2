@@ -14,9 +14,9 @@ class CreatePromotionUsersTable extends Migration
     public function up()
     {
         Schema::create('promotion_user', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('promotion_id')->constrained();
-            $table->foreignId('user_id')->constrained();
+     
+            $table->foreignId('promotion_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->boolean('inscrit_formation');
             $table->boolean('inscrit_titre');
             $table->boolean('diplome')->nullable();

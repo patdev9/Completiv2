@@ -27,6 +27,18 @@
                   >
                     Description
                   </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Titre
+                  </th>
+                  <th
+                    scope="col"
+                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                  >
+                    Volume_horaire
+                  </th>
 
                   <th scope="col" class="relative px-6 py-3">
                     <span class="sr-only">Edit</span>
@@ -42,7 +54,13 @@
                     {{ ccp.Nom }}
                   </td>
                   <td class="px-6 py-4 whitespace-nowrap">
-                    {{ ccp.Description }}
+                    {{ ccp.description }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {{ ccp.titre[0].Nom  }}
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap">
+                    {{ ccp.titre[0].pivot.Volume_horaire}} h
                   </td>
                   
   <td class="px-6 py-4 whitespace-nowrap  text-sm font-medium">
@@ -51,7 +69,7 @@
                   <td
                     class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium"
                   >
-                    <a class="text-indigo-600 hover:text-indigo-900"
+                    <a @click="edit(ccp.id)" class="text-indigo-600 hover:text-indigo-900"
                       >Modifier</a
                     >
                     <a
@@ -129,6 +147,40 @@
                   {{ $page.errors.title[0] }}
                 </div>
               </div>
+               <div class="mb-4">
+                <label>Choisi le ccp</label>
+                <select
+                  
+                  name="categorie"
+                  v-model="form.titreid"
+                  class="form-control"
+                >
+                  <option
+                    v-for="(titre, index) in titres"
+                    :key="index"
+                    :value="titre.id"
+                  >
+                    {{ titre.Nom }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  >Volume horaire</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="exampleFormControlInput1"
+                  placeholder="Entrer le nom de la filière"
+                  v-model="form.Volume_horaire"
+                />
+                <div v-if="$page.errors.title" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
             </div>
 
             <!--footer-->
@@ -145,20 +197,18 @@
                     v-on:click.prevent="store()"
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-                    v-show="!editMode"
-                  >
+                    v-show="!editMode">
                     Sauvgarder
                   </button>
                 </span>
                 <span
-                  class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto"
-                >
+                  class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
                   <button
                     v-on:click.prevent=""
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     v-show="editMode"
-                    @click="update(form)"
+                    @click="update()"
                   >
                     Modifier
                   </button>
@@ -194,13 +244,20 @@ export default {
   props: ["ccps"],
   data() {
     return {
+      titres:[],
       showModal: false,
       editMode: false,
       form: {
+        modifid:null,
         nom: null,
-        description:null
+        description:null,
+        Volume_horaire:null,
+        titreid:null
       },
     };
+  },
+  mounted(){
+    this.getTritres()
   },
   methods: {
     toggleModal: function () {
@@ -211,21 +268,50 @@ export default {
       this.reset();
       this.editMode = false;
     },
-    edit() {
+      reset() {
+      this.form = {
+        modifid:null,
+        nom: null,
+        description:null,
+        Volume_horaire:null,
+        titreid:null
+      };
+    },
+    edit(id) {
       this.editMode = true;
       this.toggleModal();
+      axios.get("/ccpget/"+id).then(res=>
+      this.form ={
+        nom: res.data[0].Nom,
+        description:res.data[0].description,
+        titreid:res.data[0].titre[0].id,
+        Volume_horaire:res.data[0].titre[0].pivot.Volume_horaire,
+        modifid:id
+      }
+      ).catch(err=>console.log(err))
     },
-    reset() {
-      this.form = {
-        nom: null,
-        description:null
-      };
+
+    getTritres(){
+      axios.get('/titresGet').then(res=>this.titres = res.data)
+    },
+  
+    update(){
+let data = new FormData();
+     
+      data.append("Nom", this.form.nom);
+      data.append("Description", this.form.description);
+      data.append("titreid", this.form.titreid);
+      data.append("Volume_horaire", this.form.Volume_horaire);
+      this.$inertia.post("/ccpupdate/"+this.form.modifid, data);
+      this.closeModal();
     },
     store() {
       console.log(this.form.nom);
       let data = new FormData();
       data.append("Nom", this.form.nom);
       data.append("Description", this.form.description);
+      data.append("titreid", this.form.titreid);
+      data.append("Volume_horaire", this.form.Volume_horaire);
       this.$inertia.post("/ccpsave", data);
       this.closeModal();
     },

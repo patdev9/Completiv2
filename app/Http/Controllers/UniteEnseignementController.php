@@ -11,13 +11,30 @@ use Inertia\Inertia;
 class UniteEnseignementController extends Controller
 {
     public function index($id){
-        $ccp = Bloc_competence::find($id);
-        $uniter = uniteEnseignement::where('bloc_competence_id','=',$id)->with('ccp')->get();
+        $ccp = Bloc_competence::with('uniter')->where('id','=',$id)->get();
         return Inertia::render('admin/uniter',[
             'ccp'=>$ccp,
-            'uniters'=>$uniter
         ]);
     }
+
+
+    public function edit($id){
+        $ue = uniteEnseignement::with('ccp')->where('id','=',$id)->get();
+        return response()->json($ue);
+    }
+
+    public function update(Request $request,$id){
+       
+        $ue = uniteEnseignement::find($id);
+        $ue->nom = $request->Nom;
+        $ue->Description = $request->Description;
+    //    $ue->ccp()->syncWithoutDetaching($request->bloc_competence_id,['Volume_horaire'=>$request->Volume_horaire]);
+        $ue->save();
+        $p = $request->bloc_competence_id;
+    
+        return $this->index($p);
+    }
+
     public function store(Request $request){
         
         
@@ -25,11 +42,13 @@ class UniteEnseignementController extends Controller
         //     'ccp' => ['required', 'string', 'max:255']
         // ])->validate();
         $id = $request['bloc_competence_id'];
-        uniteEnseignement::create([
+        $ue =uniteEnseignement::create([
             'nom'=>$request['nom'],
             'Description'=>$request['Description'],
-            'bloc_competence_id'=> $request['bloc_competence_id'],
+           // 'bloc_competence_id'=> $request['bloc_competence_id'],
         ]);
+        $ccp = Bloc_competence::find($request['bloc_competence_id']);
+        $ue->ccp()->attach($ccp,['Volume_horaire'=>$request['Volume_horaire']]);
         return $this->index($id);
     }
     public function destroy($id)

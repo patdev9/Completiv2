@@ -66,6 +66,9 @@ class User extends Authenticatable
     public function absences(){
         return $this->hasMany(absence::class, 'user_id',);
     }
+    public function retard(){
+        return $this->hasMany(retard::class,'user_id');
+    }
     /**
      * The accessors to append to the model's array form.
      *

@@ -17,7 +17,7 @@ class CreateUniteEnseignementsTable extends Migration
             $table->id();
             $table->string('nom');
             $table->text('Description');
-            $table->foreignId('bloc_competence_id')->constrained();
+          //  $table->foreignId('bloc_competence_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -26,6 +26,7 @@ class CreateUniteEnseignementsTable extends Migration
      * Reverse the migrations.
      *
      * @return void
+     * 
      */
     public function down()
     {

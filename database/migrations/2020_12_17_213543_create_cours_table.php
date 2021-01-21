@@ -17,9 +17,9 @@ class CreateCoursTable extends Migration
             $table->id();
             $table->dateTime('date_start');
             $table->dateTime('date_end');
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('promotion_id')->constrained();
-            $table->foreignId('unite_enseignement_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('promotion_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('unite_enseignement_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }

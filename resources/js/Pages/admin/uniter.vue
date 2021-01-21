@@ -1,7 +1,7 @@
 <template>
   <app-layout>
              <div class="w-full p-4">
-             <h2> {{this.$props.ccp.nom}}</h2>
+            
   <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
          <button v-on:click="toggleModal()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded my-3">Créer une Uniter d'enseignement</button>
@@ -12,9 +12,14 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Uniter d'enseignement
               </th>
-              <th scope="col" class="relative px-6 py-3">
-                <span class="sr-only">Voir les etudiants</span>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Description
               </th>
+             
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Volume horaire 
+              </th>
+             
               
               <th scope="col" class="relative px-6 py-3">
                 <span class="sr-only">Edit</span>
@@ -23,13 +28,19 @@
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
               
-            <tr v-for="uniter in this.$props.uniters" v-bind:key="uniter.id">
+            <tr v-for="uniter in this.$props.ccp[0].uniter" v-bind:key="uniter.id">
               <td class="px-6 py-4 whitespace-nowrap">
-                {{uniter.nom}}
+                {{uniter.nom}} 
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {{uniter.Description}}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                 {{uniter.pivot.Volume_horaire}} h
               </td>
                 
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                <a class="text-indigo-600 hover:text-indigo-900">Modifier</a>
+                <a @click="edit(uniter.id)" class="text-indigo-600 hover:text-indigo-900">Modifier</a>
                 <a @click="destroy(uniter.id)"  class="text-indigo-600 hover:text-indigo-900 ml-1">Supprimer</a>
               </td> 
             </tr>
@@ -88,7 +99,7 @@
                 <label
                   for="exampleFormControlInput1"
                   class="block text-gray-700 text-sm font-bold mb-2"
-                  >Description</label
+                  > Description</label
                 >
                 <input
                   type="text"
@@ -96,6 +107,23 @@
                   id="exampleFormControlInput1"
                   placeholder="Entrer le nom de la filière"
                   v-model="form.Description"
+                />
+                <div v-if="$page.errors.nom" class="text-red-500">
+                  {{ $page.errors.title[0] }}
+                </div>
+              </div>
+              <div class="mb-4">
+                <label
+                  for="exampleFormControlInput1"
+                  class="block text-gray-700 text-sm font-bold mb-2"
+                  > Volume horaire</label
+                >
+                <input
+                  type="text"
+                  class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  id="exampleFormControlInput1"
+                  placeholder="Entrer le nom de la filière"
+                  v-model="form.Volume_horaire"
                 />
                 <div v-if="$page.errors.nom" class="text-red-500">
                   {{ $page.errors.title[0] }}
@@ -130,7 +158,7 @@
                     type="button"
                     class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5"
                     v-show="editMode"
-                    @click="update(form)"
+                    @click="update()"
                   >
                     Modifier
                   </button>
@@ -163,7 +191,7 @@
 import AppLayout from '../../Layouts/AppLayout.vue'
 export default {
   components: { AppLayout },
-  props:['uniters','ccp'],
+  props:['ccp'],
    data() {
     return {
       showModal: false,
@@ -171,6 +199,8 @@ export default {
       form: {
         nom: null,
         Description: null,
+        modifid:null,
+        Volume_horaire:null
       },
     };
   },
@@ -183,21 +213,46 @@ export default {
       this.reset();
       this.editMode = false;
     },
-    edit() {
-      this.editMode = true;
-      this.toggleModal();
-    },
+   
     reset() {
       this.form = {
-        nom: null,
+            nom: null,
+        Description: null,
+        modifid:null,
+        Volume_horaire:null
       };
+    },
+     edit(id) {
+      this.editMode = true;
+      this.toggleModal();
+      axios.get("/uniteget/"+id).then(res=> 
+      this.form ={
+        nom: res.data[0].nom,
+        Description:res.data[0].Description,
+        Volume_horaire:res.data[0].ccp[0].pivot.Volume_horaire,
+        modifid:id
+      }
+      )
+      .catch(err=>console.log(err))
+    },
+  
+    update(){
+let data = new FormData();
+     
+      data.append("Nom", this.form.nom);
+      data.append("Description", this.form.Description);
+      data.append("Volume_horaire", this.form.Volume_horaire);
+      data.append("bloc_competence_id", this.$props.ccp[0].id);
+      this.$inertia.post("/uniteUpdate/"+this.form.modifid, data);
+      this.closeModal();
     },
     store() {
       console.log(this.form.nom);
       let data = new FormData();
       data.append("nom", this.form.nom);
       data.append("Description", this.form.Description);
-      data.append("bloc_competence_id", this.$props.ccp.id);
+      data.append("Volume_horaire", this.form.Volume_horaire);
+      data.append("bloc_competence_id", this.$props.ccp[0].id);
       this.$inertia.post("/unitesave", data);
       this.closeModal();
     },

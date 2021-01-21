@@ -9,4 +9,6 @@ class filiere_module_enseignement extends Model
 {
     protected $fillable = ['filiere_id','module_enseignement_id'];
     use HasFactory;
+
+    
 }

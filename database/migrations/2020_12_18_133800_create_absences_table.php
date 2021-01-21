@@ -15,8 +15,8 @@ class CreateAbsencesTable extends Migration
     {
         Schema::create('absences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->foreignId('cour_id')->constrained();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('cour_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->enum('statut',['Nouveau','en attente de justificatif','Justificatif en attente d approbation','Justificatif rejeté','Justificatif approuvé'])->default('Nouveau');
             $table->text('Justificatif')->nullable();
             $table->text('com_pedagogie')->nullable();

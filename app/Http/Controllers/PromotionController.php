@@ -19,6 +19,24 @@ class PromotionController extends Controller
         ]);
 
     }
+    public function edit($id){
+        $promotion = Promotion::find($id);
+        return response()->json($promotion);
+    }
+
+    public function update(Request $request,$id){
+       
+        $promotion = Promotion::find($id);
+        $promotion->Nom = $request->Nom;
+        $promotion->Description = $request->Description;
+        $promotion->Annee = $request->Annee;
+        $promotion->Nb_inscrit_formation = $request->inscritF;
+        $promotion->Nb_inscrit_titre = $request->inscritT;
+        $promotion->taux_reussite = $request->taux;
+        $promotion->save();
+       
+        return $this->index();
+    }
     public function store(Request $request){
         
         // $v = Validator::make($request->all(), [

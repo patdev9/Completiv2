@@ -62,7 +62,7 @@
                   class="form-control"
                 >
                   <option
-                    v-for="unit in uniters"
+                    v-for="unit in uniters.uniter"
                     :key="unit.id"
                     :value="unit.id"
                   >
@@ -343,7 +343,7 @@ export default {
     getunit() {
       axios
         .get("/units/" + this.newEvent.id)
-        .then((res) => (this.uniters = res.data))
+        .then((res) => (this.uniters = res.data[0]))
         .catch((err) => console.log(err));
     },
     getcour(id) {

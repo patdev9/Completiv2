@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\justificatif;
 use App\Models\Promotion;
+use App\Models\retard;
 
 class AbsenceController extends Controller
 {
@@ -24,25 +25,47 @@ class AbsenceController extends Controller
         ]);
     }
     public function store(Request $request){
-        
+              
         $id = $request[0]['cour_id'];
         $td =$request->request;
-        
-        foreach ($td as $p){
-            absence::create([
-                'user_id' => $p['id_user'],
-                'cour_id' => $p['cour_id'],
-               
-            ]);
-            
+        $pa= array();
+        $abs = array();
+        for($i = intval($request[0]['td']);$i < count($request->request);$i++){
+            array_push($pa,$request[$i]);
         }
+        for($i = 0;$i < intval($request[0]['td']);$i++){
+            array_push($abs,$request[$i]);
+        }
+        foreach ($abs as $p){
+            absence::create([
+                'user_id' => $p['id_user_abs'],
+                'cour_id' => $p['cour_id'],
+            ]);
+        }
+        
+        foreach ($pa as $p){
+            retard::create([
+                'user_id'=>$p['id_user_retard'],
+                'cour_id' => $p['cour_id'],
+            ]);
+        }
+        
         return $this->index($id);    
     }
+    // public function storeRetard(Request $request){
+        
+    //     $id = $request[0]['cour_id'];
+      
+        
+    //     return $this->index($id);    
+    // }
 
     public function absence($id){
         $abs = absence::where('user_id','=',$id)->with('cour')->get();
+        $retard = retard::where('user_id','=',$id)->with('cour')->get();
         return Inertia::render('etudiant/mesAbsence',[
-            'absences'=>$abs
+            'absences'=>$abs,
+            'retards'=>$retard
         ]);
     }
     

@@ -14,12 +14,12 @@ class CreateBlocCompetenceUniteEnseignementsTable extends Migration
     public function up()
     {
         Schema::create('bloc_competence_unite_enseignement', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('bloc_competence_id')->constrained();
+           
+            $table->foreignId('bloc_competence_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->unsignedBigInteger('ue_id');
             $table->string('Volume_horaire');
             $table->timestamps();
-            $table->foreign('ue_id')->references('id')->on('unite_enseignements')->constrained();
+            $table->foreign('ue_id')->references('id')->on('unite_enseignements')->constrained()->onDelete('cascade')->onUpdate('cascade');
         });
     }
 

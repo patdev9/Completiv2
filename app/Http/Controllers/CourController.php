@@ -31,7 +31,7 @@ class CourController extends Controller
         ]);
     }
     public function units($id){
-        $units = uniteEnseignement::where('bloc_competence_id','=',$id)->get();
+        $units = Bloc_competence::where('id','=',$id)->with('uniter')->get();
         return response()->json($units);
     }
     public function user(){
@@ -66,18 +66,15 @@ class CourController extends Controller
     {
         
         $id = $request['classe_id'];
-        
-        cour::create([
+       
+         cour::create([
             'date_start'=> $request['start'],
             'date_end'=> $request['end'],
             'user_id'=> $request['id_formateur'],
             'unite_enseignement_id'=> $request['unit_id'],
-
             'promotion_id'=> $request['classe_id'],
         ]);
-
-        return $this->index($id);
-        
+        return $this->index($id);        
     }
 
     public function details($id){

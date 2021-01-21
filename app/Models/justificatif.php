@@ -9,6 +9,4 @@ class justificatif extends Model
 {
     use HasFactory;
     protected $fillable = ['id','libeler','description','image'];
-
-    
 }

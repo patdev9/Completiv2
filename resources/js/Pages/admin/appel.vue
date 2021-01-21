@@ -19,6 +19,9 @@
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Absent
               </th>
+              <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                Retard
+              </th>
               <th scope="col" class="relative px-6 py-3">
                 <span class="sr-only">Edit</span>
               </th>
@@ -46,9 +49,16 @@
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                 <div>
-  <input type="checkbox" :id="user.id" :value="user.id" v-model="checked"
+  <input type="checkbox" :id="user.id" :value="user.id" v-model="absents"
          >
   <label for="scales">Absent</label>
+</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <div>
+  <input type="checkbox" :id="user.id" :value="user.id" v-model="retards"
+         >
+  <label for="scales">Retard</label>
 </div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -61,7 +71,7 @@
     </div>
   </div>
 </div>
-<button @click="store">SAVE</button>
+<button @click="store()">SAVE</button>
   </app-layout>
 </template>
 
@@ -73,17 +83,32 @@ export default {
 
     data(){
       return {
-          checked:[]
+          absents:[],
+          retards:[],
+          form:{
+            checked:null
+          }
       }
 
   },
   methods:{
       store(){
         let data = []
-        for(let i = 0; i < this.checked.length; i++){ 
+        
+        for(let i = 0; i < this.absents.length; i++){ 
             data.push({
-                'id_user': this.checked[i],
-                'cour_id': this.$props.cour.id
+                'id_user_abs': this.absents[i],
+                'cour_id': this.$props.cour.id,
+                'td':this.absents.length
+            }) 
+            this.$inertia.post('/absencesave',data)
+        
+        }
+         for(let i = 0; i< this.retards.length; i++){ 
+            data.push({
+                'id_user_retard': this.retards[i],
+                'cour_id': this.$props.cour.id,
+                'td':0
             }) 
             this.$inertia.post('/absencesave',data)
         

@@ -89,9 +89,7 @@
 									</div>
                                 </div>
                             </div>
-						</div>
-
-						
+						</div>						
 					</div>
 
 					<div v-on:click="get_just(abs.justificatif.id)"
